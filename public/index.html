@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>素材运营控制台</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <div class="logo">
+                <i class="fas fa-layer-group"></i>
+                <span>素材中心</span>
+            </div>
+        </div>
+        
+        <div class="nav-center">
+            <div class="search-box">
+                <input type="text" placeholder="搜索素材ID、广告ID、客户名..." id="globalSearch">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+        
+        <div class="nav-right">
+            <div class="notifications">
+                <div class="notification-item" id="violationAlert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="notification-item" id="systemAlert">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">1</span>
+                </div>
+            </div>
+            <div class="user-info">
+                <button class="theme-toggle" id="themeToggle" title="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <img src="https://picsum.photos/seed/user/40/40.jpg" alt="用户头像" class="user-avatar">
+                <span class="username">管理员</span>
+                <button class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <!-- 移动端菜单按钮 -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- 左侧菜单栏 -->
+        <aside class="sidebar" id="sidebar">
+            <div class="menu-item active" data-page="overview">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>首页总览</span>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenuSection(this)">
+                    数据大盘
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item" data-page="analytics">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>数据分析</span>
+                    </div>
+                    <div class="menu-item" data-page="trends">
+                        <i class="fas fa-chart-line"></i>
+                        <span>趋势图表</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenuSection(this)">
+                    🚀 投前管理
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item" data-page="pre-audit">
+                        <i class="fas fa-check-circle"></i>
+                        <span>素材预审</span>
+                    </div>
+                    <div class="menu-item" data-page="pre-test">
+                        <i class="fas fa-vial"></i>
+                        <span>素材前测</span>
+                    </div>
+                    <div class="menu-item" data-page="materials">
+                        <i class="fas fa-list"></i>
+                        <span>素材管理</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenuSection(this)">
+                    📊 投后管理
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item" data-page="violation-detection">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>违规检测</span>
+                        <span class="menu-badge">1</span>
+                    </div>
+                    <div class="menu-item" data-page="quick-approve">
+                        <i class="fas fa-thumbs-up"></i>
+                        <span>一键过审</span>
+                    </div>
+                    <div class="menu-item" data-page="post-consumption">
+                        <i class="fas fa-chart-line"></i>
+                        <span>投后消耗</span>
+                    </div>
+                    <div class="menu-item" data-page="expansion">
+                        <i class="fas fa-magic"></i>
+                        <span>爆款裂变</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenuSection(this)">
+                    ⚙️ 系统管理
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item" data-page="upload">
+                        <i class="fas fa-upload"></i>
+                        <span>素材上传</span>
+                    </div>
+                    <div class="menu-item" data-page="overview">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>数据总览</span>
+                    </div>
+                    <div class="menu-item" data-page="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span>系统通知</span>
+                        <span class="menu-badge">3</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenuSection(this)">
+                    系统管理
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item" data-page="users">
+                        <i class="fas fa-user-cog"></i>
+                        <span>用户管理</span>
+                    </div>
+                    <div class="menu-item" data-page="permissions">
+                        <i class="fas fa-key"></i>
+                        <span>权限配置</span>
+                    </div>
+                    <div class="menu-item" data-page="api-test">
+                        <i class="fas fa-flask"></i>
+                        <span>API测试</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 侧边栏底部用户信息 -->
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="https://picsum.photos/seed/user/32/32.jpg" alt="用户头像" class="user-avatar-small">
+                    <div class="user-info-small">
+                        <div class="user-name-small">管理员</div>
+                        <div class="user-role-small">超级管理员</div>
+                    </div>
+                    <div class="user-status"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主要工作区 -->
+        <main class="main-content">
+            <!-- 首页总览 -->
+            <div id="overview" class="page-content active">
+                <div class="page-header">
+                    <h1>📊 首页总览</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-sync-alt"></i>
+                            刷新数据
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-download"></i>
+                            导出报告
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 数据看板 -->
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon icon-blue">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>素材总数</h3>
+                            <div class="stat-value">1,234</div>
+                            <div class="stat-change positive">+12.5%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon icon-green">
+                            <i class="fas fa-check-double"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>预审通过率</h3>
+                            <div class="stat-value">87.3%</div>
+                            <div class="stat-change positive">+2.1%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon icon-orange">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>违规率</h3>
+                            <div class="stat-value">3.2%</div>
+                            <div class="stat-change negative">-0.8%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon icon-purple">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>投放ROI</h3>
+                            <div class="stat-value">4.2x</div>
+                            <div class="stat-change positive">+0.3x</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图表区域 -->
+                <div class="charts-container">
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>素材上传趋势</h3>
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-line"></i>
+                                <p>折线图：素材数量趋势</p>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-card">
+                            <h3>素材状态分布</h3>
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-pie"></i>
+                                <p>饼图：素材状态分布</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-row">
+                        <div class="chart-card">
+                            <h3>投放消耗分布</h3>
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-bar"></i>
+                                <p>柱状图：投放消耗分布</p>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-card">
+                            <h3>质量评分趋势</h3>
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-area"></i>
+                                <p>面积图：质量评分趋势</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 提醒日志区 -->
+                <div class="alerts-section">
+                    <div class="alerts-container">
+                        <div class="alert-group">
+                            <h3>最近违规提醒</h3>
+                            <div class="alert-list">
+                                <div class="alert-item violation">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <div class="alert-content">
+                                        <div class="alert-title">素材 #AD001234 违规</div>
+                                        <div class="alert-desc">误导性宣传 - 已自动下线</div>
+                                        <div class="alert-time">2分钟前</div>
+                                    </div>
+                                </div>
+                                <div class="alert-item violation">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <div class="alert-content">
+                                        <div class="alert-title">素材 #AD001235 违规</div>
+                                        <div class="alert-desc">版权问题 - 待人工审核</div>
+                                        <div class="alert-time">15分钟前</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert-group">
+                            <h3>最近裂变成功</h3>
+                            <div class="alert-list">
+                                <div class="alert-item success">
+                                    <i class="fas fa-magic"></i>
+                                    <div class="alert-content">
+                                        <div class="alert-title">爆款素材裂变完成</div>
+                                        <div class="alert-desc">生成 12 个变体 - 预计CTR提升25%</div>
+                                        <div class="alert-time">1小时前</div>
+                                    </div>
+                                </div>
+                                <div class="alert-item success">
+                                    <i class="fas fa-magic"></i>
+                                    <div class="alert-content">
+                                        <div class="alert-title">变体素材投放成功</div>
+                                        <div class="alert-desc">6个变体已上线 - 平均CTR 4.8%</div>
+                                        <div class="alert-time">3小时前</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert-group">
+                            <h3>投放异常提醒</h3>
+                            <div class="alert-list">
+                                <div class="alert-item warning">
+                                    <i class="fas fa-chart-line"></i>
+                                    <div class="alert-content">
+                                        <div class="alert-title">素材 #AD001236 消耗异常</div>
+                                        <div class="alert-desc">单日消耗超标 - 已暂停投放</div>
+                                        <div class="alert-time">30分钟前</div>
+                                    </div>
+                                </div>
+                                <div class="alert-item warning">
+                                    <i class="fas fa-chart-line"></i>
+                                    <div class="alert-content">
+                                        <div class="alert-title">客户 A 账户余额不足</div>
+                                        <div class="alert-desc">预计2小时后停止投放</div>
+                                        <div class="alert-time">1小时前</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 其他页面内容占位符 -->
+            <div id="upload" class="page-content">
+                <div class="page-header">
+                    <h1>📤 素材上传</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-sync-alt"></i>
+                            刷新
+                        </button>
+                        <button class="btn btn-secondary" onclick="window.open('/test-upload', '_blank')">
+                            <i class="fas fa-external-link-alt"></i>
+                            高级测试
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 基础上传区域 -->
+                <div class="upload-section">
+                    <div class="upload-area">
+                        <div class="upload-box">
+                            <input type="file" id="fileInput" accept="image/*,video/*,.txt,.doc,.docx">
+                            <label for="fileInput" class="upload-label">
+                                <div class="upload-icon">📁</div>
+                                <p>点击或拖拽文件到此处上传</p>
+                                <p class="upload-hint">支持图片、视频、文档格式</p>
+                            </label>
+                        </div>
+                        <div class="upload-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="materialName">素材名称 *</label>
+                                    <input type="text" id="materialName" placeholder="请输入素材名称" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="materialType">素材类型 *</label>
+                                    <select id="materialType" required>
+                                        <option value="">请选择类型</option>
+                                        <option value="image">图片</option>
+                                        <option value="video">视频</option>
+                                        <option value="text">文案</option>
+                                        <option value="audio">音频</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="materialCategory">素材分类 *</label>
+                                    <select id="materialCategory" required>
+                                        <option value="">请选择分类</option>
+                                        <option value="product">产品展示</option>
+                                        <option value="brand">品牌宣传</option>
+                                        <option value="activity">活动推广</option>
+                                        <option value="education">教育内容</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="materialClient">客户名称</label>
+                                    <input type="text" id="materialClient" placeholder="请输入客户名称">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="materialDescription">素材描述</label>
+                                    <textarea id="materialDescription" rows="3" placeholder="请输入素材描述信息"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="materialTags">标签</label>
+                                    <input type="text" id="materialTags" placeholder="请输入标签，用逗号分隔">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button id="uploadBtn" class="btn-primary">
+                                    <i class="fas fa-upload"></i>
+                                    上传素材
+                                </button>
+                                <button class="btn-secondary" type="reset">
+                                    <i class="fas fa-undo"></i>
+                                    重置表单
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 千川预审快速操作 -->
+                <div class="qianchuan-quick-section">
+                    <h3>千川预审快速操作</h3>
+                    <div class="quick-actions">
+                        <div class="quick-action-card">
+                            <div class="action-icon">📋</div>
+                            <h4>快速预审</h4>
+                            <p>对已上传的视频素材进行千川预审</p>
+                            <div class="quick-form">
+                                <input type="text" id="quickVideoId" placeholder="视频ID" value="2">
+                                <input type="text" id="quickAccountId" placeholder="广告主ID" value="123456789">
+                                <button class="btn btn-primary" onclick="quickQianchuanAudit()">开始预审</button>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-action-card">
+                            <div class="action-icon">📊</div>
+                            <h4>预审状态</h4>
+                            <p>查看最近的预审任务状态</p>
+                            <div class="recent-audits">
+                                <div class="audit-item">
+                                    <span class="audit-id">QC_TASK_001</span>
+                                    <span class="audit-status status-pending">处理中</span>
+                                </div>
+                                <div class="audit-item">
+                                    <span class="audit-id">QC_TASK_002</span>
+                                    <span class="audit-status status-approved">已通过</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 上传历史 -->
+                <div class="upload-history">
+                    <h3>最近上传</h3>
+                    <div class="history-list">
+                        <div class="history-item">
+                            <div class="history-info">
+                                <div class="history-name">产品演示视频.mp4</div>
+                                <div class="history-details">视频 • 25MB • 千川客户</div>
+                            </div>
+                            <div class="history-status">
+                                <span class="status-badge status-testing">预审中</span>
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-info">
+                                <div class="history-name">夏日促销横banner.jpg</div>
+                                <div class="history-details">图片 • 2.5MB • 客户A</div>
+                            </div>
+                            <div class="history-status">
+                                <span class="status-badge status-approved">已通过</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="materials" class="page-content">
+                <div class="page-header">
+                    <h1>素材列表</h1>
+                    <div class="header-actions">
+                        <button class="btn-refresh">
+                            <i class="fas fa-sync-alt"></i>
+                            刷新
+                        </button>
+                        <button class="btn-export">
+                            <i class="fas fa-download"></i>
+                            导出
+                        </button>
+                    </div>
+                </div>
+                <div class="materials-table">
+                    <div class="table-controls">
+                        <div class="filter-controls">
+                            <select id="statusFilter">
+                                <option value="all">全部状态</option>
+                                <option value="pending">待审核</option>
+                                <option value="approved">已通过</option>
+                                <option value="rejected">已拒绝</option>
+                                <option value="flagged">违规</option>
+                            </select>
+                            <select id="typeFilter">
+                                <option value="all">全部类型</option>
+                                <option value="image">图片</option>
+                                <option value="video">视频</option>
+                                <option value="text">文案</option>
+                                <option value="audio">音频</option>
+                            </select>
+                            <select id="categoryFilter">
+                                <option value="all">全部分类</option>
+                                <option value="product">产品展示</option>
+                                <option value="brand">品牌宣传</option>
+                                <option value="activity">活动推广</option>
+                                <option value="education">教育内容</option>
+                            </select>
+                            <input type="date" id="dateFilter">
+                            <input type="text" id="clientFilter" placeholder="搜索素材名称/文件名">
+                        </div>
+                        <div class="batch-actions">
+                            <button class="btn-batch">
+                                <i class="fas fa-check-square"></i>
+                                全选
+                            </button>
+                            <button class="btn-batch">
+                                <i class="fas fa-stop"></i>
+                                批量下线
+                            </button>
+                            <button class="btn-batch">
+                                <i class="fas fa-magic"></i>
+                                批量裂变
+                            </button>
+                            <button class="btn-batch">
+                                <i class="fas fa-download"></i>
+                                批量下载
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll"></th>
+                                    <th>素材ID</th>
+                                    <th>文件信息</th>
+                                    <th>分类</th>
+                                    <th>文件详情</th>
+                                    <th>创建时间</th>
+                                    <th>状态</th>
+                                    <th>预审结果</th>
+                                    <th>前测预测</th>
+                                    <th>消耗</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="materialsTableBody">
+                                <!-- 动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination">
+                        <button class="page-btn">上一页</button>
+                        <span class="page-info">第 1 页，共 10 页</span>
+                        <button class="page-btn">下一页</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 其他页面占位符 -->
+            <div id="review" class="page-content">
+                <div class="page-header">
+                    <h1>预审结果</h1>
+                    <div class="header-actions">
+                        <button class="btn-refresh" onclick="loadAuditResults()">
+                            <i class="fas fa-sync-alt"></i>
+                            刷新
+                        </button>
+                        <button class="btn-export" onclick="exportAuditResults()">
+                            <i class="fas fa-download"></i>
+                            导出
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 统计概览 -->
+                <div class="audit-stats">
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-file-video"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>总素材数</h3>
+                                <div class="stat-value" id="totalMaterials">0</div>
+                                <div class="stat-change">千川视频</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>已通过</h3>
+                                <div class="stat-value" id="approvedCount">0</div>
+                                <div class="stat-change positive" id="approvalRate">0%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>已拒绝</h3>
+                                <div class="stat-value" id="rejectedCount">0</div>
+                                <div class="stat-change negative">待优化</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>审核中</h3>
+                                <div class="stat-value" id="pendingCount">0</div>
+                                <div class="stat-change">处理中</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 筛选和搜索 -->
+                <div class="audit-filters">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label for="accountIdFilter">广告主ID</label>
+                            <input type="text" id="accountIdFilter" placeholder="输入广告主ID">
+                        </div>
+                        <div class="filter-group">
+                            <label for="statusFilter">审核状态</label>
+                            <select id="statusFilter">
+                                <option value="all">全部状态</option>
+                                <option value="passed">已通过</option>
+                                <option value="failed">已拒绝</option>
+                                <option value="pending">审核中</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="dateFilter">日期范围</label>
+                            <input type="date" id="dateFilter">
+                        </div>
+                        <div class="filter-group">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-primary" onclick="filterAuditResults()">应用筛选</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 预审结果列表 -->
+                <div class="audit-results">
+                    <div class="results-header">
+                        <h3>预审结果列表</h3>
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="list">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button class="view-btn" data-view="card">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="results-container" id="auditResultsContainer">
+                        <!-- 加载状态 -->
+                        <div class="loading-spinner" id="auditLoading">
+                            <div class="spinner"></div>
+                            <p>正在加载预审结果...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分页 -->
+                <div class="pagination" id="auditPagination">
+                    <button class="page-btn" onclick="previousPage()">上一页</button>
+                    <span class="page-info" id="pageInfo">第 1 页，共 1 页</span>
+                    <button class="page-btn" onclick="nextPage()">下一页</button>
+                </div>
+            </div>
+
+            <div id="testing" class="page-content">
+                <div class="page-header">
+                    <h1>前测预测</h1>
+                </div>
+                <div class="placeholder-content">
+                    <i class="fas fa-vial"></i>
+                    <p>前测预测页面</p>
+                </div>
+            </div>
+
+            <div id="compliance" class="page-content">
+                <div class="page-header">
+                    <h1>违规追踪</h1>
+                </div>
+                <div class="placeholder-content">
+                    <i class="fas fa-shield-alt"></i>
+                    <p>违规追踪页面</p>
+                </div>
+            </div>
+
+            <div id="monitoring" class="page-content">
+                <div class="page-header">
+                    <h1>投后监控</h1>
+                </div>
+                <div class="placeholder-content">
+                    <i class="fas fa-chart-pie"></i>
+                    <p>投后监控页面</p>
+                </div>
+            </div>
+
+            <div id="expansion" class="page-content">
+                <div class="page-header">
+                    <h1>爆款裂变</h1>
+                </div>
+                <div class="placeholder-content">
+                    <i class="fas fa-magic"></i>
+                    <p>爆款裂变页面</p>
+                </div>
+            </div>
+
+            <div id="analytics" class="page-content">
+                <div class="page-header">
+                    <h1>数据分析</h1>
+                </div>
+                <div class="placeholder-content">
+                    <i class="fas fa-chart-bar"></i>
+                    <p>数据分析页面</p>
+                </div>
+            </div>
+
+            <div id="trends" class="page-content">
+                <div class="page-header">
+                    <h1>趋势图表</h1>
+                </div>
+                <div class="placeholder-content">
+                    <i class="fas fa-chart-line"></i>
+                    <p>趋势图表页面</p>
+                </div>
+            </div>
+
+            <div id="accounts" class="page-content">
+                <div class="page-header">
+                    <h1>投放账号</h1>
+                </div>
+                <div class="placeholder-content">
+                    <i class="fas fa-users"></i>
+                    <p>投放账号页面</p>
+                </div>
+            </div>
+
+            <div id="variants" class="page-content">
+                <div class="page-header">
+                    <h1>裂变素材</h1>
+                </div>
+                <div class="placeholder-content">
+                    <i class="fas fa-clone"></i>
+                    <p>裂变素材页面</p>
+                </div>
+            </div>
+
+            <div id="notifications" class="page-content">
+                <div class="page-header">
+                    <h1>系统通知</h1>
+                </div>
+                <div class="placeholder-content">
+                    <i class="fas fa-bell"></i>
+                    <p>系统通知页面</p>
+                </div>
+            </div>
+
+            <div id="users" class="page-content">
+                <div class="page-header">
+                    <h1>用户管理</h1>
+                </div>
+                <div class="placeholder-content">
+                    <i class="fas fa-user-cog"></i>
+                    <p>用户管理页面</p>
+                </div>
+            </div>
+
+            <div id="permissions" class="page-content">
+                <div class="page-header">
+                    <h1>权限配置</h1>
+                </div>
+                <div class="placeholder-content">
+                    <i class="fas fa-key"></i>
+                    <p>权限配置页面</p>
+                </div>
+            </div>
+
+            <div id="api-test" class="page-content">
+                <div class="page-header">
+                    <h1>API测试中心</h1>
+                    <div class="header-actions">
+                        <button class="btn-refresh">
+                            <i class="fas fa-sync-alt"></i>
+                            刷新
+                        </button>
+                        <button class="btn-export" onclick="window.open('/test-upload', '_blank')">
+                            <i class="fas fa-external-link-alt"></i>
+                            完整测试
+                        </button>
+                    </div>
+                </div>
+                <div class="upload-test-container">
+                    <!-- 功能说明 -->
+                    <div class="test-description">
+                        <h3>功能说明</h3>
+                        <p>此页面用于测试API功能，包含以下特性：</p>
+                        <ul>
+                            <li>模拟数据测试</li>
+                            <li>违规素材检测测试</li>
+                            <li>千川预审接口集成</li>
+                            <li>批量预审功能测试</li>
+                            <li>状态查询功能测试</li>
+                            <li>实时测试结果反馈</li>
+                        </ul>
+                    </div>
+
+                    <!-- 千川预审接口配置 -->
+                    <div class="qianchuan-config">
+                        <h3>千川预审接口配置</h3>
+                        <div class="config-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="qcAccountId">广告主ID</label>
+                                    <input type="text" id="qcAccountId" placeholder="请输入广告主ID" value="123456789">
+                                </div>
+                                <div class="form-group">
+                                    <label for="qcAccessToken">Access Token</label>
+                                    <input type="text" id="qcAccessToken" placeholder="请输入Access Token" value="mock_access_token_123">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="qcVideoId">视频ID</label>
+                                    <input type="text" id="qcVideoId" placeholder="请输入视频ID" value="2">
+                                </div>
+                                <div class="form-group">
+                                    <label for="qcMsgType">操作类型</label>
+                                    <select id="qcMsgType">
+                                        <option value="SEND">送审</option>
+                                        <option value="RECALL">取消送审</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 测试操作区域 -->
+                    <div class="test-actions">
+                        <div class="action-card">
+                            <div class="action-icon">🧪</div>
+                            <h4>模拟数据测试</h4>
+                            <p>使用预设的模拟数据进行快速功能测试</p>
+                            <button class="btn btn-success" onclick="startMockTest()">开始测试</button>
+                        </div>
+                        
+                        <div class="action-card">
+                            <div class="action-icon">⚠️</div>
+                            <h4>违规检测测试</h4>
+                            <p>测试违规素材的检测和处理流程</p>
+                            <button class="btn btn-danger" onclick="startViolationTest()">开始测试</button>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="action-icon">📋</div>
+                            <h4>千川单个预审</h4>
+                            <p>测试千川单个视频素材预审功能</p>
+                            <button class="btn btn-info" onclick="startQianchuanSingleAudit()">开始预审</button>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="action-icon">📊</div>
+                            <h4>千川批量预审</h4>
+                            <p>测试千川批量视频素材预审功能</p>
+                            <button class="btn btn-warning" onclick="startQianchuanBatchAudit()">批量预审</button>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="action-icon">🔍</div>
+                            <h4>预审状态查询</h4>
+                            <p>查询千川预审任务状态和结果</p>
+                            <button class="btn btn-secondary" onclick="startQianchuanStatusQuery()">状态查询</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 测试结果展示 -->
+                    <div class="test-results" id="testResults">
+                        <h3>测试结果</h3>
+                        <div id="resultsContainer">
+                            <p style="color: #666; text-align: center;">暂无测试结果</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 投前管理页面 -->
+            <div id="pre-audit" class="page-content">
+                <div class="page-header">
+                    <h1>🔍 素材预审</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            新建预审
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-download"></i>
+                            导出报告
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 预审配置区域 -->
+                <div class="audit-config">
+                    <div class="config-card">
+                        <h3>千川预审配置</h3>
+                        <div class="config-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="auditAccountId">广告主ID</label>
+                                    <input type="text" id="auditAccountId" placeholder="请输入广告主ID" value="123456789">
+                                </div>
+                                <div class="form-group">
+                                    <label for="auditAccessToken">Access Token</label>
+                                    <input type="text" id="auditAccessToken" placeholder="请输入Access Token" value="mock_access_token_123">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="auditVideoId">视频ID</label>
+                                    <input type="text" id="auditVideoId" placeholder="请输入视频ID">
+                                </div>
+                                <div class="form-group">
+                                    <label for="auditMsgType">操作类型</label>
+                                    <select id="auditMsgType">
+                                        <option value="SEND">送审</option>
+                                        <option value="RECALL">取消送审</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" onclick="startMaterialAudit()">开始预审</button>
+                                <button class="btn btn-secondary" onclick="checkAuditStatus()">查询状态</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 预审结果展示 -->
+                <div class="audit-results">
+                    <div class="results-header">
+                        <h3>预审结果</h3>
+                        <div class="view-toggle">
+                            <button class="view-btn active">列表视图</button>
+                            <button class="view-btn">卡片视图</button>
+                        </div>
+                    </div>
+                    <div class="results-container" id="auditResultsContainer">
+                        <div class="placeholder-content">
+                            <i class="fas fa-clipboard-check"></i>
+                            <p>暂无预审结果，请先进行素材预审</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 素材前测页面 -->
+            <div id="pre-test" class="page-content">
+                <div class="page-header">
+                    <h1>🧪 素材前测</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-play"></i>
+                            开始前测
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-history"></i>
+                            测试历史
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 前测配置 -->
+                <div class="test-config">
+                    <div class="config-card">
+                        <h3>前测参数配置</h3>
+                        <div class="config-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="testMaterialId">素材ID</label>
+                                    <input type="text" id="testMaterialId" placeholder="请输入素材ID">
+                                </div>
+                                <div class="form-group">
+                                    <label for="testMaterialType">素材类型</label>
+                                    <select id="testMaterialType">
+                                        <option value="video">视频</option>
+                                        <option value="image">图片</option>
+                                        <option value="text">文案</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="testTargetAudience">目标受众</label>
+                                    <select id="testTargetAudience">
+                                        <option value="young">年轻用户</option>
+                                        <option value="middle">中年用户</option>
+                                        <option value="elderly">老年用户</option>
+                                        <option value="all">全年龄段</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="testBudget">测试预算</label>
+                                    <input type="number" id="testBudget" placeholder="请输入测试预算">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" onclick="startPreTest()">开始前测</button>
+                                <button class="btn btn-secondary" onclick="resetTestForm()">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 前测结果 -->
+                <div class="test-results">
+                    <div class="results-header">
+                        <h3>前测结果</h3>
+                        <div class="test-stats">
+                            <span class="stat-item">测试中: <strong>3</strong></span>
+                            <span class="stat-item">已完成: <strong>12</strong></span>
+                            <span class="stat-item">优质率: <strong>75%</strong></span>
+                        </div>
+                    </div>
+                    <div class="results-grid" id="testResultsGrid">
+                        <div class="placeholder-content">
+                            <i class="fas fa-flask"></i>
+                            <p>暂无前测结果，请先进行素材前测</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 投后管理页面 -->
+            <div id="violation-detection" class="page-content">
+                <div class="page-header">
+                    <h1>🛡️ 违规检测</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                            开始检测
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            违规列表
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 违规检测配置 -->
+                <div class="violation-config">
+                    <div class="config-card">
+                        <h3>违规检测配置</h3>
+                        <div class="config-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="agentId">代理商ID</label>
+                                    <input type="text" id="agentId" placeholder="请输入代理商ID">
+                                </div>
+                                <div class="form-group">
+                                    <label for="businessType">业务类型</label>
+                                    <select id="businessType">
+                                        <option value="AD">巨量广告</option>
+                                        <option value="QIAN_CHUAN">千川业务</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="startDate">开始时间</label>
+                                    <input type="date" id="startDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="endDate">结束时间</label>
+                                    <input type="date" id="endDate">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" onclick="startViolationDetection()">开始检测</button>
+                                <button class="btn btn-secondary" onclick="exportViolationResults()">导出结果</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 违规检测结果 -->
+                <div class="violation-results">
+                    <div class="results-header">
+                        <h3>违规检测结果</h3>
+                        <div class="violation-stats">
+                            <span class="stat-item danger">违规素材: <strong>5</strong></span>
+                            <span class="stat-item warning">关联广告: <strong>12</strong></span>
+                            <span class="stat-item info">已处理: <strong>3</strong></span>
+                        </div>
+                    </div>
+                    <div class="violation-list" id="violationList">
+                        <div class="placeholder-content">
+                            <i class="fas fa-shield-alt"></i>
+                            <p>暂无违规检测结果，请先进行违规检测</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 一键过审页面 -->
+            <div id="quick-approve" class="page-content">
+                <div class="page-header">
+                    <h1>⚡ 一键过审</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-bolt"></i>
+                            批量过审
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-cog"></i>
+                            设置
+                        </button>
+                    </div>
+                </div>
+
+                <div class="development-notice">
+                    <div class="notice-card">
+                        <div class="notice-icon">🚧</div>
+                        <div class="notice-content">
+                            <h3>功能开发中</h3>
+                            <p>一键过审功能正在开发中，敬请期待...</p>
+                            <div class="notice-features">
+                                <h4>即将支持的功能：</h4>
+                                <ul>
+                                    <li>批量素材自动过审</li>
+                                    <li>智能风险识别</li>
+                                    <li>审核规则配置</li>
+                                    <li>审核结果统计</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 投后消耗页面 -->
+            <div id="post-consumption" class="page-content">
+                <div class="page-header">
+                    <h1>📈 投后消耗</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-sync"></i>
+                            刷新数据
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-download"></i>
+                            导出报表
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 消耗统计 -->
+                <div class="consumption-stats">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon icon-blue">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>总消耗</h3>
+                                <div class="stat-value">¥1,234,567</div>
+                                <div class="stat-change positive">+12.5%</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-green">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>返点比例</h3>
+                                <div class="stat-value">15.2%</div>
+                                <div class="stat-change positive">+2.1%</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-orange">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>返点金额</h3>
+                                <div class="stat-value">¥187,654</div>
+                                <div class="stat-change positive">+18.3%</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-purple">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>ROI</h3>
+                                <div class="stat-value">4.2x</div>
+                                <div class="stat-change positive">+0.3x</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 消耗详情 -->
+                <div class="consumption-details">
+                    <div class="details-card">
+                        <h3>素材粒度消耗详情</h3>
+                        <div class="consumption-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>素材ID</th>
+                                        <th>素材名称</th>
+                                        <th>消耗金额</th>
+                                        <th>返点比例</th>
+                                        <th>返点金额</th>
+                                        <th>返点上限</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>AD000001</td>
+                                        <td>夏季促销视频</td>
+                                        <td>¥125,000</td>
+                                        <td>15%</td>
+                                        <td>¥18,750</td>
+                                        <td>¥50,000</td>
+                                        <td>
+                                            <button class="btn-action" onclick="viewConsumptionDetail(1)">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>AD000002</td>
+                                        <td>产品展示图片</td>
+                                        <td>¥89,500</td>
+                                        <td>12%</td>
+                                        <td>¥10,740</td>
+                                        <td>¥30,000</td>
+                                        <td>
+                                            <button class="btn-action" onclick="viewConsumptionDetail(2)">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 爆款裂变页面 -->
+            <div id="expansion" class="page-content">
+                <div class="page-header">
+                    <h1>✨ 爆款裂变</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-magic"></i>
+                            开始裂变
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-history"></i>
+                            裂变历史
+                        </button>
+                    </div>
+                </div>
+
+                <div class="development-notice">
+                    <div class="notice-card">
+                        <div class="notice-icon">🚧</div>
+                        <div class="notice-content">
+                            <h3>功能开发中</h3>
+                            <p>爆款裂变功能正在开发中，敬请期待...</p>
+                            <div class="notice-features">
+                                <h4>即将支持的功能：</h4>
+                                <ul>
+                                    <li>智能素材裂变</li>
+                                    <li>爆款素材识别</li>
+                                    <li>裂变效果预测</li>
+                                    <li>裂变结果统计</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
